@@ -11,7 +11,7 @@ import {
 } from '../types';
 
 /**
- * Intelligent Career Copilot & Multi-Agent Engine
+ * Intelligent AI Resume & Multi-Agent Engine
  * Supports live Google Gemini API calls with graceful, deterministic
  * intelligent heuristic fallback for 100% offline / presentation reliability.
  */
@@ -461,7 +461,7 @@ export async function chatWithCareerAgent(
 
   // Try calling Gemini first if API key is present
   if (config?.geminiApiKey) {
-    const systemPrompt = `You are NextRole's elite Multi-Agent Career Copilot.
+    const systemPrompt = `You are an elite Multi-Agent Career Assistant and Resume Strategist.
 Candidate: ${resume.personalInfo.fullName}
 Target Role: ${jd.roleTitle} at ${jd.company}
 Resume summary: ${resume.professionalSummary}
@@ -473,7 +473,7 @@ Act as an encouraging, deeply knowledgeable career advisor, ATS resume optimizer
     const geminiReply = await callGemini(userInput, systemPrompt, config);
     if (geminiReply) {
       let agentType: AgentType = 'orchestrator';
-      let agentName = 'NextRole Career Lead';
+      let agentName = 'Career Lead';
       if (query.includes('ats') || query.includes('match') || query.includes('score')) {
         agentType = 'recon';
         agentName = 'Hiring Recon Agent';
@@ -562,8 +562,8 @@ Check out the **Day-of Battlecard** tab to view or print it!`
 
   return {
     agentType: 'orchestrator',
-    agentName: 'NextRole Orchestrator',
-    reply: `Hello! I am your **NextRole Career Copilot**. I work with our specialized subagents:
+    agentName: 'AI Orchestrator',
+    reply: `Hello! I am your **AI Career Assistant**. I work with our specialized subagents:
 - 📊 **Hiring Recon**: Scans the JD and calculates your ATS match score.
 - 📄 **Resume Tailor**: Optimizes your CV with metric-driven bullet points for this specific role.
 - 🎯 **Interview Coach**: Builds custom STAR stories (Situation, Task, Action, Result).

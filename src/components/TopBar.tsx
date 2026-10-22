@@ -24,15 +24,15 @@ export const TopBar: React.FC<TopBarProps> = ({
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#ff6600] font-['Sora'] font-bold text-white shadow-md shadow-[#ff6600]/30 text-lg">
-            N
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#ff6600] font-['Sora'] font-bold text-white shadow-md shadow-[#ff6600]/30 text-base">
+            AI
           </div>
           <div className="flex items-center gap-2">
             <span className="font-['Sora'] text-lg font-bold text-white tracking-tight">
-              NextRole AI
+              AI Resume Studio
             </span>
             <span className="hidden sm:inline-block rounded-md bg-[#ff6600]/15 border border-[#ff6600]/30 px-2 py-0.5 text-[11px] font-semibold text-[#ffa05c]">
-              Career Copilot
+              Career Studio
             </span>
           </div>
         </div>
@@ -46,7 +46,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             <span className={`relative inline-flex rounded-full h-2 w-2 ${isProcessing ? 'bg-[#ff6600]' : 'bg-[#10b981]'}`} />
           </span>
           <span className="font-medium">
-            {isProcessing ? 'Analyzing career graph...' : 'Copilot ready'}
+            {isProcessing ? 'Analyzing career graph...' : 'Assistant ready'}
           </span>
         </div>
 

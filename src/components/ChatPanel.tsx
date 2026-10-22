@@ -89,10 +89,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         className="hidden"
       />
 
-      {/* Copilot Header */}
+      {/* Chat Assistant Header */}
       <div className="border-b border-[#262836] px-5 py-4 flex items-center justify-between bg-[#15161f] shrink-0">
         <div>
-          <h2 className="font-['Sora'] font-semibold text-sm text-white">AI Career Copilot</h2>
+          <h2 className="font-['Sora'] font-semibold text-sm text-white">AI Career Assistant</h2>
           <p className="flex items-center gap-1.5 text-xs text-[#94a3b8] mt-0.5">
             <span className="h-2 w-2 rounded-full bg-[#10b981] animate-pulse" />
             <span>Ready to assist</span>
@@ -139,7 +139,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             <span className="w-2 h-2 rounded-full bg-[#ff6600] animate-bounce" />
             <span className="w-2 h-2 rounded-full bg-[#ff6600] animate-bounce [animation-delay:0.2s]" />
             <span className="w-2 h-2 rounded-full bg-[#ff6600] animate-bounce [animation-delay:0.4s]" />
-            <span className="ml-1 text-xs text-[#94a3b8] italic">Copilot is thinking...</span>
+            <span className="ml-1 text-xs text-[#94a3b8] italic">AI is thinking...</span>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -210,7 +210,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             disabled={isProcessing}
-            placeholder="Ask copilot: 'tailor resume', 'give interview answers'..."
+            placeholder="Ask: 'tailor resume', 'give interview answers'..."
             className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-[#090a0f] border border-[#262836] text-xs sm:text-sm text-white placeholder-[#64748b] focus:outline-none focus:border-[#ff6600] focus:ring-1 focus:ring-[#ff6600] transition"
           />
           <button

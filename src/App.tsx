@@ -26,7 +26,7 @@ import { ConfigModal } from './components/ConfigModal';
 export const App: React.FC = () => {
   // Config state
   const [config, setConfig] = useState<AppConfig>(() => {
-    const saved = localStorage.getItem('nextrole_config');
+    const saved = localStorage.getItem('ai_resume_config') || localStorage.getItem('nextrole_config');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -60,10 +60,10 @@ export const App: React.FC = () => {
     {
       id: 'welcome-1',
       sender: 'assistant',
-      agentName: 'NextRole Orchestrator',
+      agentName: 'AI Orchestrator',
       agentType: 'orchestrator',
-      content: `👋 **Welcome to NextRole AI!**
-I am your GenAI Career Copilot. I've automatically loaded your candidate profile and the target job description for **${SAMPLE_JOB_DESCRIPTION.roleTitle}** at **${SAMPLE_JOB_DESCRIPTION.company}**.
+      content: `👋 **Welcome to AI Resume Studio!**
+I am your Career Assistant. I've automatically loaded your candidate profile and the target job description for **${SAMPLE_JOB_DESCRIPTION.roleTitle}** at **${SAMPLE_JOB_DESCRIPTION.company}**.
 
 **Pipeline Status**:
 - 🔍 **ATS Match Score**: Evaluated at **88%** alignment
@@ -104,7 +104,7 @@ Use the workspace tabs on the right to review artifacts, or chat with me anytime
 
   const handleSaveConfig = (newConfig: AppConfig) => {
     setConfig(newConfig);
-    localStorage.setItem('nextrole_config', JSON.stringify(newConfig));
+    localStorage.setItem('ai_resume_config', JSON.stringify(newConfig));
   };
 
   const handleLoadDemo = async () => {
@@ -130,7 +130,7 @@ Use the workspace tabs on the right to review artifacts, or chat with me anytime
       {
         id: `demo-${Date.now()}`,
         sender: 'assistant',
-        agentName: 'NextRole Intake Agent',
+        agentName: 'Intake Assistant',
         agentType: 'intake',
         content: `⚡ **College Demo Profile Successfully Loaded!**
 Reloaded candidate **${SAMPLE_RESUME.personalInfo.fullName}** and job description for **${SAMPLE_JOB_DESCRIPTION.company}**. All subagents have completed their initial synthesis.`,
@@ -214,7 +214,7 @@ Injected all missing keywords, upgraded experience achievements to Google XYZ me
       {
         id: `reset-${Date.now()}`,
         sender: 'assistant',
-        agentName: 'NextRole Orchestrator',
+        agentName: 'AI Orchestrator',
         agentType: 'orchestrator',
         content: '🔄 Workspace refreshed. Provide a resume or job description to begin.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -436,7 +436,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
 
       {/* Main Studio Grid: Matching Lovable layout */}
       <main className="mx-auto grid max-w-7xl w-full gap-6 px-4 py-6 lg:grid-cols-[380px_1fr] flex-1 items-start">
-        {/* Left Column: AI Career Copilot */}
+        {/* Left Column: AI Career Assistant */}
         <ChatPanel
           messages={messages}
           onSendMessage={handleSendMessage}

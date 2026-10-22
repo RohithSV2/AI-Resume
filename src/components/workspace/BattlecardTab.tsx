@@ -17,7 +17,7 @@ export const BattlecardTab: React.FC<BattlecardTabProps> = ({ battlecard }) => {
         <Zap className="w-12 h-12 text-[#ff6600] animate-pulse" />
         <h3 className="text-lg font-bold text-white font-['Sora']">No Battlecard Assembled</h3>
         <p className="text-sm max-w-md text-[#94a3b8]">
-          Click "Build Battlecard" in the copilot panel to generate your 1-page day-of interview cheat sheet.
+          Click "Build Battlecard" in the chat panel to generate your 1-page day-of interview cheat sheet.
         </p>
       </div>
     );

@@ -58,7 +58,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
           <div className="p-3.5 rounded-xl bg-[#ff6600]/10 border border-[#ff6600]/30 text-xs text-[#cbd5e1] flex items-start space-x-2.5">
             <ShieldCheck className="w-4 h-4 text-[#ff6600] shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold text-[#ffa05c]">Dual-Intelligence Architecture:</span> If you provide a Google Gemini API Key, live generative calls will be used. If no key is entered, NextRole automatically switches to its built-in intelligent engine so all features (ATS scoring, resume tailoring, STAR prep, battlecard) work 100% reliably!
+              <span className="font-bold text-[#ffa05c]">Dual-Intelligence Architecture:</span> If you provide a Google Gemini API Key, live generative calls will be used. If no key is entered, the platform automatically switches to its built-in intelligent engine so all features (ATS scoring, resume tailoring, STAR prep, battlecard) work 100% reliably!
             </div>
           </div>
 

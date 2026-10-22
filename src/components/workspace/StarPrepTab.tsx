@@ -22,7 +22,7 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
         <Target className="w-12 h-12 text-[#ff6600] animate-pulse" />
         <h3 className="text-lg font-bold text-white font-['Sora']">No STAR Stories Generated</h3>
         <p className="text-sm max-w-md text-[#94a3b8]">
-          Click "STAR Prep" in the copilot panel to build tailored interview responses mapped directly to the job requirements.
+          Click "STAR Prep" in the chat panel to build tailored interview responses mapped directly to the job requirements.
         </p>
       </div>
     );
