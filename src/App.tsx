@@ -423,7 +423,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-slate-950 text-slate-100 font-sans">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#f7faee] text-slate-800 font-sans">
       {/* Top Header */}
       <TopBar
         activeAgent={activeAgent}

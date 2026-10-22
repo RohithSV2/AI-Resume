@@ -44,42 +44,37 @@ export const ArtifactWorkspace: React.FC<ArtifactWorkspaceProps> = ({
       label: 'ATS & Recon',
       icon: Target,
       badge: recon ? `${recon.atsScore}%` : undefined,
-      color: 'text-blue-400',
     },
     {
       id: 'resume',
       label: 'Tailored Resume',
       icon: FileText,
       badge: resume?.tailoredSummary ? 'Optimized' : undefined,
-      color: 'text-purple-400',
     },
     {
       id: 'star',
       label: 'STAR Prep Guide',
       icon: Sparkles,
       badge: stories.length > 0 ? `${stories.length} Qs` : undefined,
-      color: 'text-amber-400',
     },
     {
       id: 'battlecard',
       label: 'Day-of Battlecard',
       icon: Zap,
       badge: battlecard ? 'Ready' : undefined,
-      color: 'text-rose-400',
     },
     {
       id: 'mock',
       label: 'Mock Simulator',
       icon: Mic,
-      color: 'text-emerald-400',
     },
   ];
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-slate-950">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f7faee]">
       {/* Workspace Tabs Header */}
-      <div className="h-13 border-b border-slate-800 bg-slate-900/60 px-4 flex items-center justify-between overflow-x-auto no-scrollbar shrink-0">
-        <div className="flex items-center space-x-1 sm:space-x-2">
+      <div className="h-14 border-b border-[#e0ecc8] bg-white px-5 flex items-center justify-between overflow-x-auto no-scrollbar shrink-0 shadow-2xs">
+        <div className="flex items-center space-x-2">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -88,16 +83,20 @@ export const ArtifactWorkspace: React.FC<ArtifactWorkspaceProps> = ({
               <button
                 key={tab.id}
                 onClick={() => onSelectTab(tab.id)}
-                className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer whitespace-nowrap ${
                   isActive
-                    ? 'bg-slate-800 text-white shadow-sm border border-slate-700'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+                    ? 'bg-[#ecfccb] text-[#365314] border border-[#bef264] shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-[#f4fae6]'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? tab.color : 'text-slate-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#4d7c0f]' : 'text-slate-400'}`} />
                 <span>{tab.label}</span>
                 {tab.badge && (
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-950 text-slate-300 border border-slate-800 font-bold">
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${
+                    isActive 
+                      ? 'bg-[#d9f99d] text-[#365314]' 
+                      : 'bg-[#f4fae6] text-[#4d7c0f] border border-[#d9e6be]'
+                  }`}>
                     {tab.badge}
                   </span>
                 )}
@@ -108,46 +107,46 @@ export const ArtifactWorkspace: React.FC<ArtifactWorkspaceProps> = ({
       </div>
 
       {/* Main Tab Content Area */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-        {activeTab === 'recon' && (
-          <ReconTab
-            recon={recon}
-            jd={jd}
-            onNavigateTab={onSelectTab}
-            onRunTailoring={onRunTailoring}
-            onOptimize100Ats={onOptimize100Ats}
-            isProcessing={isProcessing}
-          />
-        )}
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="max-w-5xl mx-auto">
+          {activeTab === 'recon' && (
+            <ReconTab
+              recon={recon}
+              jd={jd}
+              onNavigateTab={onSelectTab}
+              onRunTailoring={onRunTailoring}
+              onOptimize100Ats={onOptimize100Ats}
+              isProcessing={isProcessing}
+            />
+          )}
 
-        {activeTab === 'resume' && (
-          <ResumeTab
-            resume={resume}
-            onUpdateResume={onUpdateResume}
-          />
-        )}
+          {activeTab === 'resume' && (
+            <ResumeTab
+              resume={resume}
+              onUpdateResume={onUpdateResume}
+            />
+          )}
 
-        {activeTab === 'star' && (
-          <StarPrepTab
-            stories={stories}
-            onTogglePracticed={onTogglePracticed}
-            onNavigateToMock={(q) => {
-              onSelectTab('mock');
-            }}
-          />
-        )}
+          {activeTab === 'star' && (
+            <StarPrepTab
+              stories={stories}
+              onTogglePracticed={onTogglePracticed}
+              onNavigateToMock={() => onSelectTab('mock')}
+            />
+          )}
 
-        {activeTab === 'battlecard' && (
-          <BattlecardTab battlecard={battlecard} />
-        )}
+          {activeTab === 'battlecard' && (
+            <BattlecardTab battlecard={battlecard} />
+          )}
 
-        {activeTab === 'mock' && (
-          <MockInterviewTab
-            jd={jd}
-            stories={stories}
-            initialQuestion={selectedMockQuestion}
-          />
-        )}
+          {activeTab === 'mock' && (
+            <MockInterviewTab
+              jd={jd}
+              stories={stories}
+              initialQuestion={selectedMockQuestion}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

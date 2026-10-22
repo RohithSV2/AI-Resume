@@ -18,11 +18,11 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
 
   if (!stories || stories.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-center text-slate-400 space-y-4">
-        <Target className="w-12 h-12 text-slate-600 animate-pulse" />
-        <h3 className="text-lg font-semibold text-slate-300">No STAR Stories Generated</h3>
-        <p className="text-sm max-w-md text-slate-400">
-          Click "Generate STAR Prep" in the copilot panel to build tailored interview responses mapped directly to the job requirements.
+      <div className="flex flex-col items-center justify-center p-12 text-center text-slate-500 space-y-4 bg-white rounded-2xl border border-[#e2eccb]">
+        <Target className="w-12 h-12 text-lime-400 animate-pulse" />
+        <h3 className="text-lg font-bold text-slate-900">No STAR Stories Generated</h3>
+        <p className="text-sm max-w-md text-slate-600">
+          Click "STAR Prep" in the copilot panel to build tailored interview responses mapped directly to the job requirements.
         </p>
       </div>
     );
@@ -39,27 +39,27 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
   return (
     <div className="space-y-5 pb-12 animate-in fade-in duration-200">
       {/* Progress & Category Filter */}
-      <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 shadow-md">
+      <div className="p-5 rounded-2xl bg-white border border-[#e2eccb] space-y-3.5 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-sm font-semibold text-white flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+            <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-lime-600" />
               <span>STAR Method Interview Guide</span>
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               Structured responses demonstrating real technical leadership and quantifiable impact.
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs">
-            <span className="text-slate-400">Readiness:</span>
-            <div className="w-28 h-2.5 rounded-full bg-slate-800 overflow-hidden border border-slate-700">
+          <div className="flex items-center space-x-2.5 text-xs">
+            <span className="text-slate-600 font-medium">Readiness:</span>
+            <div className="w-28 h-2.5 rounded-full bg-[#f4fae6] overflow-hidden border border-[#d9e6be]">
               <div 
-                className="h-full bg-gradient-to-r from-purple-500 to-emerald-400 transition-all duration-300"
+                className="h-full bg-[#65a30d] transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <span className="font-semibold text-emerald-400">{practicedCount}/{stories.length} Done</span>
+            <span className="font-bold text-[#365314]">{practicedCount}/{stories.length} Done</span>
           </div>
         </div>
 
@@ -69,10 +69,10 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800'
+                  ? 'bg-[#65a30d] text-white shadow-2xs'
+                  : 'bg-[#f7faee] text-slate-700 hover:text-slate-900 border border-[#d9e6be]'
               }`}
             >
               {cat}
@@ -82,7 +82,7 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
       </div>
 
       {/* Questions List */}
-      <div className="space-y-4">
+      <div className="space-y-3.5">
         {filtered.map((story) => {
           const isExpanded = expandedId === story.id;
 
@@ -91,8 +91,8 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
               key={story.id}
               className={`rounded-2xl border transition-all overflow-hidden ${
                 isExpanded 
-                  ? 'bg-slate-900/90 border-purple-500/50 shadow-xl shadow-purple-950/20' 
-                  : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+                  ? 'bg-white border-[#84cc16] shadow-sm' 
+                  : 'bg-white border-[#e2eccb] hover:border-[#c3d99e]'
               }`}
             >
               {/* Card Header */}
@@ -102,14 +102,14 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
               >
                 <div className="space-y-1.5 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                    <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase bg-[#ecfccb] text-[#365314] border border-[#d9f99d]">
                       {story.category}
                     </span>
-                    <span className="text-xs text-slate-400 font-medium">
+                    <span className="text-xs text-slate-500 font-semibold">
                       🎯 {story.targetSkill}
                     </span>
                   </div>
-                  <h4 className="text-sm sm:text-base font-semibold text-slate-100 leading-snug">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
                     {story.question}
                   </h4>
                 </div>
@@ -121,10 +121,10 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
                       e.stopPropagation();
                       onTogglePracticed(story.id);
                     }}
-                    className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                    className={`p-1.5 rounded-xl border transition-colors cursor-pointer ${
                       story.practiced
-                        ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                        : 'bg-slate-950 border-slate-800 text-slate-500 hover:text-slate-300'
+                        ? 'bg-[#ecfccb] border-[#bef264] text-[#365314]'
+                        : 'bg-[#f7faee] border-[#d9e6be] text-slate-400 hover:text-slate-600'
                     }`}
                     title={story.practiced ? 'Marked as Practiced' : 'Mark as Practiced'}
                   >
@@ -139,62 +139,62 @@ export const StarPrepTab: React.FC<StarPrepTabProps> = ({
 
               {/* Expanded STAR Breakdown */}
               {isExpanded && (
-                <div className="px-5 pb-5 pt-2 border-t border-slate-800/80 space-y-4">
+                <div className="px-5 pb-5 pt-2 border-t border-[#edf5dc] space-y-4 bg-[#fbfdf7]">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                     {/* S: Situation */}
-                    <div className="p-3.5 rounded-xl bg-blue-950/20 border border-blue-900/40 space-y-1">
-                      <div className="font-bold text-blue-400 flex items-center space-x-1.5">
-                        <span className="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center text-[10px]">S</span>
+                    <div className="p-3.5 rounded-xl bg-white border border-[#e2eccb] space-y-1 shadow-2xs">
+                      <div className="font-bold text-blue-700 flex items-center space-x-1.5">
+                        <span className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-[10px]">S</span>
                         <span>Situation</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed pl-6">{story.situation}</p>
+                      <p className="text-slate-700 leading-relaxed pl-6">{story.situation}</p>
                     </div>
 
                     {/* T: Task */}
-                    <div className="p-3.5 rounded-xl bg-indigo-950/20 border border-indigo-900/40 space-y-1">
-                      <div className="font-bold text-indigo-400 flex items-center space-x-1.5">
-                        <span className="w-5 h-5 rounded-full bg-indigo-500/20 flex items-center justify-center text-[10px]">T</span>
+                    <div className="p-3.5 rounded-xl bg-white border border-[#e2eccb] space-y-1 shadow-2xs">
+                      <div className="font-bold text-indigo-700 flex items-center space-x-1.5">
+                        <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-[10px]">T</span>
                         <span>Task</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed pl-6">{story.task}</p>
+                      <p className="text-slate-700 leading-relaxed pl-6">{story.task}</p>
                     </div>
 
                     {/* A: Action */}
-                    <div className="p-3.5 rounded-xl bg-purple-950/20 border border-purple-900/40 space-y-1">
-                      <div className="font-bold text-purple-400 flex items-center space-x-1.5">
-                        <span className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center text-[10px]">A</span>
+                    <div className="p-3.5 rounded-xl bg-white border border-[#e2eccb] space-y-1 shadow-2xs">
+                      <div className="font-bold text-[#4d7c0f] flex items-center space-x-1.5">
+                        <span className="w-5 h-5 rounded-full bg-[#ecfccb] flex items-center justify-center text-[10px]">A</span>
                         <span>Action</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed pl-6">{story.action}</p>
+                      <p className="text-slate-700 leading-relaxed pl-6">{story.action}</p>
                     </div>
 
                     {/* R: Result */}
-                    <div className="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-900/40 space-y-1">
-                      <div className="font-bold text-emerald-400 flex items-center space-x-1.5">
-                        <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px]">R</span>
+                    <div className="p-3.5 rounded-xl bg-white border border-[#e2eccb] space-y-1 shadow-2xs">
+                      <div className="font-bold text-emerald-700 flex items-center space-x-1.5">
+                        <span className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-[10px]">R</span>
                         <span>Result</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed pl-6">{story.result}</p>
+                      <p className="text-slate-700 leading-relaxed pl-6">{story.result}</p>
                     </div>
                   </div>
 
                   {/* Key Metric & Delivery Tip */}
-                  <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-900/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center space-x-2 text-amber-300">
-                      <Award className="w-4 h-4 shrink-0" />
+                  <div className="p-3 rounded-xl bg-[#ecfccb] border border-[#d9f99d] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center space-x-2 text-[#365314]">
+                      <Award className="w-4 h-4 shrink-0 text-lime-700" />
                       <span><strong>Key Metric to Quote:</strong> {story.keyMetric}</span>
                     </div>
 
                     <button
                       onClick={() => onNavigateToMock(story.question)}
-                      className="px-3 py-1.5 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/40 text-xs font-semibold cursor-pointer transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f7faee] text-[#365314] border border-[#bef264] text-xs font-bold cursor-pointer transition-colors shadow-2xs"
                     >
-                      🎙️ Practice in Mock Simulator
+                      🎙️ Practice in Simulator
                     </button>
                   </div>
 
-                  <div className="flex items-start space-x-2 text-xs text-slate-400 pl-1">
-                    <Lightbulb className="w-3.5 h-3.5 text-purple-400 shrink-0 mt-0.5" />
+                  <div className="flex items-start space-x-2 text-xs text-slate-600 pl-1">
+                    <Lightbulb className="w-3.5 h-3.5 text-lime-600 shrink-0 mt-0.5" />
                     <span><strong>Pro Coach Tip:</strong> {story.deliveryTip}</span>
                   </div>
                 </div>

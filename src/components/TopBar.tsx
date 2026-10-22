@@ -22,91 +22,87 @@ export const TopBar: React.FC<TopBarProps> = ({
   const getAgentLabel = (agent: AgentType) => {
     switch (agent) {
       case 'intake':
-        return { name: 'Document Intake Agent', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' };
+        return { name: 'Document Intake', color: 'bg-lime-100 text-lime-800 border-lime-300' };
       case 'recon':
-        return { name: 'Hiring Recon Agent', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' };
+        return { name: 'Hiring Recon', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' };
       case 'tailor':
-        return { name: 'Resume Tailor Agent', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30' };
+        return { name: 'Resume Tailor', color: 'bg-lime-100 text-lime-900 border-lime-300' };
       case 'interview_coach':
-        return { name: 'Interview Coach Agent', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30' };
+        return { name: 'Interview Coach', color: 'bg-amber-100 text-amber-800 border-amber-300' };
       case 'battlecard':
-        return { name: 'Battlecard Agent', color: 'bg-rose-500/20 text-rose-400 border-rose-500/30' };
+        return { name: 'Battlecard Gen', color: 'bg-teal-100 text-teal-800 border-teal-300' };
       default:
-        return { name: 'NextRole Orchestrator', color: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' };
+        return { name: 'AI Copilot Ready', color: 'bg-[#ecfccb] text-[#365314] border-[#bef264]' };
     }
   };
 
   const agentInfo = getAgentLabel(activeAgent);
 
   return (
-    <header className="h-16 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md px-4 flex items-center justify-between sticky top-0 z-40">
-      {/* Brand & Title */}
+    <header className="h-16 border-b border-[#e0ecc8] bg-white/95 backdrop-blur-md px-5 flex items-center justify-between sticky top-0 z-40 shadow-xs">
+      {/* Brand */}
       <div className="flex items-center space-x-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20 border border-purple-400/30">
-          <Sparkles className="w-5 h-5 text-white" />
+        <div className="w-9 h-9 rounded-xl bg-[#84cc16] flex items-center justify-center text-white shadow-sm shadow-lime-500/30">
+          <Sparkles className="w-5 h-5 fill-current" />
         </div>
         <div>
           <div className="flex items-center space-x-2">
-            <span className="font-bold text-lg text-white tracking-tight">NextRole</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-semibold border border-purple-500/30">
-              AI Copilot
-            </span>
-            <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700">
-              College Edition
+            <span className="font-extrabold text-lg text-slate-900 tracking-tight">NextRole</span>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#ecfccb] text-[#3f6212] font-bold border border-[#d9f99d]">
+              AI Career Copilot
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 hidden sm:block">GenAI Career Advancement & Multi-Agent Prep System</p>
+          <p className="text-[11px] text-slate-500 hidden sm:block">Smart Resume Tailoring & Interview Prep</p>
         </div>
       </div>
 
-      {/* Center: Live Agent Status Indicator */}
-      <div className="hidden lg:flex items-center space-x-2 text-xs">
-        <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Active Subagent:</span>
-        <div className={`px-2.5 py-0.5 rounded-full text-xs font-medium border flex items-center space-x-1.5 ${agentInfo.color}`}>
+      {/* Center: Clean Status Pill */}
+      <div className="hidden lg:flex items-center space-x-2">
+        <div className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center space-x-1.5 ${agentInfo.color}`}>
           <Bot className="w-3.5 h-3.5" />
           <span>{agentInfo.name}</span>
           {isProcessing && (
-            <span className="w-1.5 h-1.5 rounded-full bg-current animate-ping ml-1" />
+            <span className="w-2 h-2 rounded-full bg-lime-600 animate-ping ml-1" />
           )}
         </div>
       </div>
 
-      {/* Right Action Controls (Every single button is functional) */}
+      {/* Right Controls */}
       <div className="flex items-center space-x-2">
         {/* 100% ATS Benchmark Button */}
         <button
           onClick={onLoad100Ats}
-          title="Load 100% ATS Web Standard Benchmark Profile"
-          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-bold shadow-md shadow-emerald-500/20 flex items-center space-x-1.5 transition-all transform active:scale-95 cursor-pointer"
+          title="Load 100% ATS Score Resume & Job"
+          className="px-3.5 py-2 rounded-xl bg-[#65a30d] hover:bg-[#4d7c0f] text-white text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all transform active:scale-95 cursor-pointer"
         >
           <Award className="w-3.5 h-3.5" />
-          <span>💯 100% ATS Web Standard</span>
+          <span>💯 100% ATS Score</span>
         </button>
 
-        {/* 1-Click Demo Button */}
+        {/* Sample Profile Button */}
         <button
           onClick={onLoadDemo}
-          title="Load sample candidate profile & job description"
-          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-medium shadow-md shadow-indigo-500/20 flex items-center space-x-1.5 transition-all transform active:scale-95 cursor-pointer"
+          title="Load standard tech candidate profile"
+          className="px-3 py-2 rounded-xl bg-white hover:bg-[#f7faee] text-slate-700 hover:text-slate-900 border border-[#d9e6be] text-xs font-semibold shadow-xs flex items-center space-x-1.5 transition-all cursor-pointer"
         >
-          <Zap className="w-3.5 h-3.5 fill-current" />
-          <span>⚡ Demo Profile</span>
+          <Zap className="w-3.5 h-3.5 text-lime-600 fill-lime-600" />
+          <span>Sample Profile</span>
         </button>
 
-        {/* Reset Button */}
+        {/* Reset */}
         <button
           onClick={onReset}
-          title="Reset chat conversation"
-          className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition-colors cursor-pointer"
+          title="Reset chat"
+          className="p-2 rounded-xl bg-white hover:bg-[#f7faee] text-slate-500 hover:text-slate-800 border border-[#d9e6be] transition-colors cursor-pointer"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
 
-        {/* Config Modal Button */}
+        {/* Settings */}
         <button
           onClick={onOpenConfig}
           title="Gemini API & Model Settings"
-          className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition-colors cursor-pointer"
+          className="p-2 rounded-xl bg-white hover:bg-[#f7faee] text-slate-500 hover:text-slate-800 border border-[#d9e6be] transition-colors cursor-pointer"
         >
           <Settings className="w-4 h-4" />
         </button>
