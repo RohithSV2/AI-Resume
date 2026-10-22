@@ -423,7 +423,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#f7faee] text-slate-800 font-sans">
+    <div className="min-h-screen bg-[#090a0f] text-[#f8fafc] font-sans selection:bg-[#ff6600] selection:text-white flex flex-col">
       {/* Top Header */}
       <TopBar
         activeAgent={activeAgent}
@@ -434,9 +434,9 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
         isProcessing={isProcessing}
       />
 
-      {/* Main Split-Pane Workspace */}
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-        {/* Left Pane: Interactive Multi-Agent Copilot */}
+      {/* Main Studio Grid: Matching Lovable layout */}
+      <main className="mx-auto grid max-w-7xl w-full gap-6 px-4 py-6 lg:grid-cols-[380px_1fr] flex-1 items-start">
+        {/* Left Column: AI Career Copilot */}
         <ChatPanel
           messages={messages}
           onSendMessage={handleSendMessage}
@@ -449,7 +449,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
           onTriggerAction={handleTriggerAction}
         />
 
-        {/* Right Pane: Live Artifact Workspace */}
+        {/* Right Column: Live Artifact Workspace */}
         <ArtifactWorkspace
           activeTab={activeTab}
           onSelectTab={setActiveTab}

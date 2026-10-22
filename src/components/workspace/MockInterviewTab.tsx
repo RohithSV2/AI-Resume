@@ -61,26 +61,26 @@ export const MockInterviewTab: React.FC<MockInterviewTabProps> = ({
   };
 
   return (
-    <div className="space-y-5 pb-12 animate-in fade-in duration-200">
+    <div className="space-y-4 pb-12 animate-in fade-in duration-200">
       {/* Top Banner */}
-      <div className="p-4 rounded-2xl bg-white border border-[#e2eccb] flex items-center justify-between shadow-xs">
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#111218] border border-[#262836] flex items-center justify-between shadow-xl">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#ecfccb] text-[#365314] border border-[#d9f99d]">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-[#ff6600]/15 text-[#ffa05c] border border-[#ff6600]/30">
               AI Mock Simulator
             </span>
-            <span className="text-xs text-slate-600 font-medium">
+            <span className="text-xs text-[#94a3b8] font-medium hidden sm:inline">
               Interactive Interview Practice & Instant STAR Scoring
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#64748b] mt-1">
             Question {currentQIndex + 1} of {defaultQuestions.length}
           </p>
         </div>
 
         <button
           onClick={handleNextQuestion}
-          className="px-3 py-1.5 rounded-lg bg-[#f7faee] hover:bg-[#eef5dc] text-[#365314] border border-[#d9f99d] text-xs font-medium flex items-center space-x-1.5 transition-colors cursor-pointer"
+          className="px-3 py-1.5 rounded-lg bg-[#181924] hover:bg-[#202230] text-[#cbd5e1] hover:text-white border border-[#262836] text-xs font-medium flex items-center space-x-1.5 transition cursor-pointer"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Next Question</span>
@@ -88,24 +88,24 @@ export const MockInterviewTab: React.FC<MockInterviewTabProps> = ({
       </div>
 
       {/* Active Question Box */}
-      <div className="p-6 rounded-2xl bg-[#fbfdf7] border border-[#d9f99d] shadow-xs space-y-3">
-        <div className="text-xs font-bold uppercase tracking-wider text-[#4d7c0f] flex items-center space-x-1.5">
-          <Mic className="w-4 h-4 text-[#65a30d]" />
+      <div className="p-6 rounded-2xl bg-[#151620] border border-[#ff6600]/40 shadow-xl space-y-3">
+        <div className="text-xs font-bold uppercase tracking-wider text-[#ffa05c] flex items-center space-x-1.5">
+          <Mic className="w-4 h-4 text-[#ff6600]" />
           <span>Interviewer Prompt</span>
         </div>
-        <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+        <h3 className="text-base sm:text-lg font-bold font-['Sora'] text-white leading-snug">
           "{activeQuestion}"
         </h3>
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-[#94a3b8]">
           💡 <em>Tip: Structure your response using the STAR method: Situation, Task, Action, and Measurable Result.</em>
         </p>
       </div>
 
       {/* User Answer Textarea */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold text-slate-700 flex items-center justify-between">
+        <label className="text-xs font-semibold text-[#cbd5e1] flex items-center justify-between">
           <span>Your Response</span>
-          <span className="text-[11px] text-slate-500 font-normal">
+          <span className="text-[11px] text-[#64748b]">
             {userAnswer.trim().split(/\s+/).filter(Boolean).length} words
           </span>
         </label>
@@ -114,14 +114,14 @@ export const MockInterviewTab: React.FC<MockInterviewTabProps> = ({
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}
           placeholder="e.g. During my previous role at Apex Tech, our micro-frontend dashboard experienced severe latency under 40k active users. I was tasked with reducing bundle size..."
-          className="w-full p-4 rounded-xl bg-white border border-[#d2e2b3] text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#65a30d] focus:ring-2 focus:ring-[#84cc16]/20 transition-colors leading-relaxed shadow-xs"
+          className="w-full p-4 rounded-xl bg-[#0d0e14] border border-[#262836] text-sm text-white placeholder-[#64748b] focus:outline-none focus:border-[#ff6600] focus:ring-1 focus:ring-[#ff6600] transition leading-relaxed shadow-xl"
         />
 
         <div className="flex justify-end space-x-2 pt-1">
           <button
             onClick={handleEvaluate}
             disabled={evaluating || !userAnswer.trim()}
-            className="px-5 py-2.5 rounded-xl bg-[#65a30d] hover:bg-[#4d7c0f] disabled:opacity-50 text-white text-xs font-semibold shadow-xs flex items-center space-x-2 cursor-pointer transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[#ff6600] hover:bg-[#ff771a] disabled:opacity-50 text-white text-xs font-bold shadow-md shadow-[#ff6600]/25 flex items-center space-x-2 cursor-pointer transition"
           >
             {evaluating ? (
               <>
@@ -140,16 +140,16 @@ export const MockInterviewTab: React.FC<MockInterviewTabProps> = ({
 
       {/* Real-Time Evaluation Result */}
       {result && (
-        <div className="p-6 rounded-2xl bg-white border border-[#e2eccb] shadow-sm space-y-4 animate-in fade-in duration-300">
-          <div className="flex items-center justify-between border-b border-[#e5eed2] pb-4">
+        <div className="p-6 rounded-2xl bg-[#111218] border border-[#262836] shadow-2xl space-y-4 animate-in fade-in duration-300">
+          <div className="flex items-center justify-between border-b border-[#262836] pb-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-xl bg-[#ecfccb] border border-[#bef264] flex flex-col items-center justify-center text-[#365314] font-bold">
-                <span className="text-lg">{result.score}</span>
-                <span className="text-[9px] uppercase -mt-1 text-slate-500">/ 10</span>
+              <div className="w-12 h-12 rounded-xl bg-[#ff6600]/15 border border-[#ff6600]/40 flex flex-col items-center justify-center text-[#ffa05c] font-bold">
+                <span className="text-lg font-['Sora']">{result.score}</span>
+                <span className="text-[9px] uppercase -mt-1 text-[#94a3b8]">/ 10</span>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">Interview Performance Rating</h4>
-                <p className="text-xs text-slate-600">
+                <h4 className="text-sm font-bold font-['Sora'] text-white">Interview Performance Rating</h4>
+                <p className="text-xs text-[#94a3b8]">
                   {result.score >= 8 ? '🌟 Outstanding execution & delivery' : result.score >= 6 ? '👍 Good structure with room for metric enhancement' : '⚠️ Missing crucial STAR components'}
                 </p>
               </div>
@@ -158,43 +158,43 @@ export const MockInterviewTab: React.FC<MockInterviewTabProps> = ({
 
           {/* STAR Checklist */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.situation ? 'bg-[#ecfccb] border-[#bef264] text-[#365314]' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
-              {result.starRatings.situation ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-slate-400" />}
+            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.situation ? 'bg-[#10b981]/15 border-[#10b981]/30 text-[#6ee7b7]' : 'bg-[#171822] border-[#262836] text-[#64748b]'}`}>
+              {result.starRatings.situation ? <CheckCircle2 className="w-4 h-4 text-[#10b981]" /> : <XCircle className="w-4 h-4 text-[#64748b]" />}
               <span>Situation</span>
             </div>
 
-            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.task ? 'bg-[#ecfccb] border-[#bef264] text-[#365314]' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
-              {result.starRatings.task ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-slate-400" />}
+            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.task ? 'bg-[#10b981]/15 border-[#10b981]/30 text-[#6ee7b7]' : 'bg-[#171822] border-[#262836] text-[#64748b]'}`}>
+              {result.starRatings.task ? <CheckCircle2 className="w-4 h-4 text-[#10b981]" /> : <XCircle className="w-4 h-4 text-[#64748b]" />}
               <span>Task</span>
             </div>
 
-            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.action ? 'bg-[#ecfccb] border-[#bef264] text-[#365314]' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
-              {result.starRatings.action ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-slate-400" />}
+            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.action ? 'bg-[#10b981]/15 border-[#10b981]/30 text-[#6ee7b7]' : 'bg-[#171822] border-[#262836] text-[#64748b]'}`}>
+              {result.starRatings.action ? <CheckCircle2 className="w-4 h-4 text-[#10b981]" /> : <XCircle className="w-4 h-4 text-[#64748b]" />}
               <span>Action (You)</span>
             </div>
 
-            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.result ? 'bg-[#ecfccb] border-[#bef264] text-[#365314]' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
-              {result.starRatings.result ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-slate-400" />}
+            <div className={`p-2.5 rounded-lg border flex items-center space-x-2 ${result.starRatings.result ? 'bg-[#10b981]/15 border-[#10b981]/30 text-[#6ee7b7]' : 'bg-[#171822] border-[#262836] text-[#64748b]'}`}>
+              {result.starRatings.result ? <CheckCircle2 className="w-4 h-4 text-[#10b981]" /> : <XCircle className="w-4 h-4 text-[#64748b]" />}
               <span>Metric Result</span>
             </div>
           </div>
 
           {/* Feedback */}
-          <div className="p-3.5 rounded-xl bg-[#f7faee] border border-[#e2eccb] space-y-1.5 text-xs text-slate-700">
-            <div className="font-semibold text-[#365314] flex items-center space-x-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#65a30d]" />
+          <div className="p-3.5 rounded-xl bg-[#171822] border border-[#262836] space-y-1.5 text-xs text-[#cbd5e1]">
+            <div className="font-semibold text-[#ffa05c] flex items-center space-x-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#ff6600]" />
               <span>Coach Feedback</span>
             </div>
             <p className="leading-relaxed">{result.feedback}</p>
           </div>
 
           {/* Improved Answer Snippet */}
-          <div className="p-3.5 rounded-xl bg-[#ecfdf5] border border-[#a7f3d0] space-y-1.5 text-xs">
-            <div className="font-semibold text-emerald-800 flex items-center space-x-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="p-3.5 rounded-xl bg-[#ff6600]/10 border border-[#ff6600]/30 space-y-1.5 text-xs">
+            <div className="font-semibold text-[#ffa05c] flex items-center space-x-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981]" />
               <span>Suggested Enhancement Ending</span>
             </div>
-            <p className="text-slate-700 italic leading-relaxed">
+            <p className="text-[#f1f5f9] italic leading-relaxed">
               "{result.improvedAnswerSnippet}"
             </p>
           </div>

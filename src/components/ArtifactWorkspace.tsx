@@ -53,100 +53,100 @@ export const ArtifactWorkspace: React.FC<ArtifactWorkspaceProps> = ({
     },
     {
       id: 'star',
-      label: 'STAR Prep Guide',
+      label: 'STAR Prep',
       icon: Sparkles,
       badge: stories.length > 0 ? `${stories.length} Qs` : undefined,
     },
     {
       id: 'battlecard',
-      label: 'Day-of Battlecard',
+      label: 'Battlecard',
       icon: Zap,
       badge: battlecard ? 'Ready' : undefined,
     },
     {
       id: 'mock',
-      label: 'Mock Simulator',
+      label: 'Mock Interview',
       icon: Mic,
     },
   ];
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f7faee]">
-      {/* Workspace Tabs Header */}
-      <div className="h-14 border-b border-[#e0ecc8] bg-white px-5 flex items-center justify-between overflow-x-auto no-scrollbar shrink-0 shadow-2xs">
-        <div className="flex items-center space-x-2">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
+    <div className="flex-1 min-w-0">
+      {/* Tab Navigation: Matching Lovable studio layout */}
+      <nav className="mb-5 flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
 
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onSelectTab(tab.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer whitespace-nowrap ${
-                  isActive
-                    ? 'bg-[#ecfccb] text-[#365314] border border-[#bef264] shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-[#f4fae6]'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#4d7c0f]' : 'text-slate-400'}`} />
-                <span>{tab.label}</span>
-                {tab.badge && (
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${
-                    isActive 
-                      ? 'bg-[#d9f99d] text-[#365314]' 
-                      : 'bg-[#f4fae6] text-[#4d7c0f] border border-[#d9e6be]'
-                  }`}>
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+          return (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => onSelectTab(tab.id)}
+              className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition cursor-pointer ${
+                isActive
+                  ? 'bg-[#ff6600] text-white shadow-md shadow-[#ff6600]/25 border border-[#ff6600]'
+                  : 'bg-[#111218] text-[#94a3b8] hover:text-white hover:bg-[#181924] border border-[#262836]'
+              }`}
+            >
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#64748b]'}`} />
+              <span>{tab.label}</span>
+              {tab.badge && (
+                <span
+                  className={`rounded-md px-1.5 py-0.5 text-[11px] font-bold ${
+                    isActive
+                      ? 'bg-black/30 text-white'
+                      : 'bg-[#1b1d28] text-[#ffa05c] border border-[#ff6600]/30'
+                  }`}
+                >
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </nav>
 
-      {/* Main Tab Content Area */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-        <div className="max-w-5xl mx-auto">
-          {activeTab === 'recon' && (
-            <ReconTab
-              recon={recon}
-              jd={jd}
-              onNavigateTab={onSelectTab}
-              onRunTailoring={onRunTailoring}
-              onOptimize100Ats={onOptimize100Ats}
-              isProcessing={isProcessing}
-            />
-          )}
+      {/* Main Tab Content */}
+      <div>
+        {activeTab === 'recon' && (
+          <ReconTab
+            recon={recon}
+            jd={jd}
+            onNavigateTab={onSelectTab}
+            onRunTailoring={onRunTailoring}
+            onOptimize100Ats={onOptimize100Ats}
+            isProcessing={isProcessing}
+          />
+        )}
 
-          {activeTab === 'resume' && (
-            <ResumeTab
-              resume={resume}
-              onUpdateResume={onUpdateResume}
-            />
-          )}
+        {activeTab === 'resume' && (
+          <ResumeTab
+            resume={resume}
+            onUpdateResume={onUpdateResume}
+          />
+        )}
 
-          {activeTab === 'star' && (
-            <StarPrepTab
-              stories={stories}
-              onTogglePracticed={onTogglePracticed}
-              onNavigateToMock={() => onSelectTab('mock')}
-            />
-          )}
+        {activeTab === 'star' && (
+          <StarPrepTab
+            stories={stories}
+            onTogglePracticed={onTogglePracticed}
+            onNavigateToMock={() => onSelectTab('mock')}
+          />
+        )}
 
-          {activeTab === 'battlecard' && (
-            <BattlecardTab battlecard={battlecard} />
-          )}
+        {activeTab === 'battlecard' && (
+          <BattlecardTab battlecard={battlecard} />
+        )}
 
-          {activeTab === 'mock' && (
-            <MockInterviewTab
-              jd={jd}
-              stories={stories}
-              initialQuestion={selectedMockQuestion}
-            />
-          )}
-        </div>
+        {activeTab === 'mock' && (
+          <MockInterviewTab
+            jd={jd}
+            stories={stories}
+            initialQuestion={selectedMockQuestion}
+          />
+        )}
       </div>
     </div>
   );
