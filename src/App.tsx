@@ -23,6 +23,7 @@ import { TopBar } from './components/TopBar';
 import { ChatPanel } from './components/ChatPanel';
 import { ArtifactWorkspace } from './components/ArtifactWorkspace';
 import { ConfigModal } from './components/ConfigModal';
+import { UploadModal } from './components/UploadModal';
 
 export const App: React.FC = () => {
   // Config state
@@ -466,6 +467,21 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
     setIsProcessing(false);
   };
 
+  const handleApplyIntake = (data: {
+    resumeText: string;
+    filename: string;
+    jdText?: string;
+    jdTitle?: string;
+    jdCompany?: string;
+  }) => {
+    if (data.resumeText) {
+      handleUploadResumeText(data.resumeText, data.filename);
+    }
+    if (data.jdText) {
+      handleUpdateJdText(data.jdText, data.jdTitle, data.jdCompany);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#090a0f] text-[#f8fafc] font-sans selection:bg-[#ff6600] selection:text-white flex flex-col">
       {/* Top Header */}
@@ -492,8 +508,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
           onUploadResumeText={handleUploadResumeText}
           onUpdateJdText={handleUpdateJdText}
           onTriggerAction={handleTriggerAction}
-          showUploadModal={uploadModalOpen}
-          onCloseUploadModal={() => setUploadModalOpen(false)}
+          onOpenUpload={() => setUploadModalOpen(true)}
         />
 
         {/* Right Column: Live Artifact Workspace */}
@@ -520,6 +535,13 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
         onClose={() => setConfigOpen(false)}
         config={config}
         onSaveConfig={handleSaveConfig}
+      />
+
+      {/* Upload CV / JD Modal */}
+      <UploadModal
+        isOpen={uploadModalOpen}
+        onClose={() => setUploadModalOpen(false)}
+        onApplyIntake={handleApplyIntake}
       />
     </div>
   );
