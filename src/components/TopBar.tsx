@@ -59,18 +59,19 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
       </div>
 
-      {/* Center: Live Agent Status */}
-      <div className="hidden md:flex items-center space-x-2">
-        <div className={`px-3 py-1 rounded-full text-xs font-medium border flex items-center space-x-1.5 ${agentInfo.color}`}>
-          <Bot className="w-3.5 h-3.5 animate-pulse" />
+      {/* Center: Live Agent Status Indicator */}
+      <div className="hidden lg:flex items-center space-x-2 text-xs">
+        <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Active Subagent:</span>
+        <div className={`px-2.5 py-0.5 rounded-full text-xs font-medium border flex items-center space-x-1.5 ${agentInfo.color}`}>
+          <Bot className="w-3.5 h-3.5" />
           <span>{agentInfo.name}</span>
           {isProcessing && (
-            <span className="w-2 h-2 rounded-full bg-current animate-ping ml-1" />
+            <span className="w-1.5 h-1.5 rounded-full bg-current animate-ping ml-1" />
           )}
         </div>
       </div>
 
-      {/* Right Controls */}
+      {/* Right Action Controls (Every single button is functional) */}
       <div className="flex items-center space-x-2">
         {/* 100% ATS Benchmark Button */}
         <button
@@ -85,7 +86,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* 1-Click Demo Button */}
         <button
           onClick={onLoadDemo}
-          title="Load candidate profile & job description"
+          title="Load sample candidate profile & job description"
           className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-medium shadow-md shadow-indigo-500/20 flex items-center space-x-1.5 transition-all transform active:scale-95 cursor-pointer"
         >
           <Zap className="w-3.5 h-3.5 fill-current" />
@@ -95,7 +96,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Reset Button */}
         <button
           onClick={onReset}
-          title="Reset workspace"
+          title="Reset chat conversation"
           className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition-colors cursor-pointer"
         >
           <RefreshCw className="w-4 h-4" />
