@@ -6,6 +6,10 @@
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vite.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-4285F4?logo=google&logoColor=white)](https://aistudio.google.com)
+[![Live on Vercel](https://img.shields.io/badge/Live%20Demo-Vercel-black?logo=vercel&logoColor=white)](https://ai-resume-tau-orcin.vercel.app)
+
+> 🌐 **Live Production URL:** **[https://ai-resume-tau-orcin.vercel.app](https://ai-resume-tau-orcin.vercel.app)**
+
 
 ---
 
