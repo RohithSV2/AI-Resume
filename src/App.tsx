@@ -18,6 +18,7 @@ import {
   generateBattlecard, 
   chatWithCareerAgent 
 } from './services/aiService';
+import { parseResumeTextToStructured } from './services/fileParser';
 import { TopBar } from './components/TopBar';
 import { ChatPanel } from './components/ChatPanel';
 import { ArtifactWorkspace } from './components/ArtifactWorkspace';
@@ -41,6 +42,7 @@ export const App: React.FC = () => {
     };
   });
   const [configOpen, setConfigOpen] = useState(false);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   // Core Data State
   const [resume, setResume] = useState<ResumeData>(SAMPLE_RESUME);
@@ -360,25 +362,67 @@ Injected all missing keywords, upgraded experience achievements to Google XYZ me
     setIsProcessing(true);
     setActiveAgent('intake');
 
-    // Create updated resume object incorporating parsed text
+    // Parse extracted text into structured resume attributes
+    const parsed = parseResumeTextToStructured(text, filename);
     const updated: ResumeData = {
-      ...resume,
-      professionalSummary: text.slice(0, 300) || resume.professionalSummary,
+      personalInfo: {
+        fullName: parsed.fullName,
+        email: parsed.email,
+        phone: parsed.phone,
+        location: parsed.location,
+        linkedin: resume.personalInfo.linkedin,
+        github: resume.personalInfo.github,
+      },
+      professionalSummary: parsed.summary,
+      skills: [
+        {
+          category: 'Core Technical Skills',
+          items: parsed.skills,
+        },
+        ...resume.skills.slice(1),
+      ],
+      experience: [
+        {
+          id: `exp-${Date.now()}`,
+          company: 'Recent Experience',
+          role: jd.roleTitle || 'Software Engineer',
+          period: '2023 – Present',
+          location: parsed.location,
+          achievements: [
+            parsed.summary,
+            ...parsed.skills.slice(0, 4).map(s => `Architected and maintained high-scale microservices using ${s}.`),
+          ],
+        },
+        ...resume.experience.slice(1),
+      ],
+      education: resume.education,
+      projects: resume.projects,
+      certifications: resume.certifications,
     };
     setResume(updated);
 
     const reconResult = await analyzeJobMatch(updated, jd, config);
     setRecon(reconResult);
 
+    const tailored = await tailorResume(updated, jd, config);
+    setResume(tailored);
+
+    const starStories = await generateStarPrep(tailored, jd, config);
+    setStories(starStories);
+
+    const card = await generateBattlecard(tailored, jd, config);
+    setBattlecard(card);
+
     setMessages(prev => [
       ...prev,
       {
         id: `upload-${Date.now()}`,
         sender: 'assistant',
-        agentName: 'Document Intake Agent',
+        agentName: 'Intake Assistant',
         agentType: 'intake',
         content: `📁 **Resume Received (${filename || 'Uploaded Document'})**:
-Extracted profile text and synchronized with our Recon Agent. New ATS match score is **${reconResult.atsScore}%**.`,
+Successfully parsed candidate profile for **${parsed.fullName}** (${parsed.skills.length} technical skills: ${parsed.skills.slice(0, 5).join(', ')}...).
+New ATS match score is **${reconResult.atsScore}%**. Tailored resume, STAR prep, and battlecard have been regenerated!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }
     ]);
@@ -431,6 +475,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
         onLoadDemo={handleLoadDemo}
         onLoad100Ats={handleLoad100AtsProfile}
         onReset={handleReset}
+        onOpenUpload={() => setUploadModalOpen(true)}
         isProcessing={isProcessing}
       />
 
@@ -447,6 +492,8 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
           onUploadResumeText={handleUploadResumeText}
           onUpdateJdText={handleUpdateJdText}
           onTriggerAction={handleTriggerAction}
+          showUploadModal={uploadModalOpen}
+          onCloseUploadModal={() => setUploadModalOpen(false)}
         />
 
         {/* Right Column: Live Artifact Workspace */}

@@ -8,9 +8,12 @@ import {
   Paperclip,
   Upload,
   X,
-  Award
+  Award,
+  CheckCircle2,
+  RefreshCw
 } from 'lucide-react';
 import { ChatMessage, AgentType, ResumeData, JobDescriptionData } from '../types';
+import { extractTextFromFile } from '../services/fileParser';
 
 interface ChatPanelProps {
   messages: ChatMessage[];
@@ -22,6 +25,8 @@ interface ChatPanelProps {
   onUploadResumeText: (text: string, filename?: string) => void;
   onUpdateJdText: (text: string, title?: string, company?: string) => void;
   onTriggerAction: (actionKey: 'recon' | 'tailor' | 'star' | 'battlecard' | 'mock' | 'ats100') => void;
+  showUploadModal?: boolean;
+  onCloseUploadModal?: () => void;
 }
 
 export const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -34,15 +39,27 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   onUploadResumeText,
   onUpdateJdText,
   onTriggerAction,
+  showUploadModal: externalShowUploadModal,
+  onCloseUploadModal,
 }) => {
   const [inputText, setInputText] = useState('');
-  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [internalShowModal, setInternalShowModal] = useState(false);
   const [pastedResume, setPastedResume] = useState('');
   const [pastedJd, setPastedJd] = useState('');
   const [jdTitle, setJdTitle] = useState('');
   const [jdCompany, setJdCompany] = useState('');
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const [isExtracting, setIsExtracting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const showModal = externalShowUploadModal ?? internalShowModal;
+  const setShowModal = (open: boolean) => {
+    setInternalShowModal(open);
+    if (!open && onCloseUploadModal) {
+      onCloseUploadModal();
+    }
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -55,27 +72,38 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
     setInputText('');
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      onUploadResumeText(content, file.name);
-    };
-    reader.readAsText(file);
-    e.target.value = '';
+    setIsExtracting(true);
+    try {
+      const extractedText = await extractTextFromFile(file);
+      setUploadedFileName(file.name);
+      setPastedResume(extractedText);
+
+      // If user clicked paperclip outside the modal, process directly
+      if (!showModal) {
+        onUploadResumeText(extractedText, file.name);
+      }
+    } catch (err) {
+      console.error('File extraction failed:', err);
+      alert('Could not read file directly. You can paste your resume text into the text box.');
+    } finally {
+      setIsExtracting(false);
+      e.target.value = '';
+    }
   };
 
   const handleApplyCustomIntake = () => {
-    if (pastedResume.trim()) {
-      onUploadResumeText(pastedResume.trim(), 'Custom_Resume.txt');
+    const resumeTextToUse = pastedResume.trim();
+    if (resumeTextToUse) {
+      onUploadResumeText(resumeTextToUse, uploadedFileName || 'Custom_Resume.txt');
     }
     if (pastedJd.trim()) {
       onUpdateJdText(pastedJd.trim(), jdTitle || 'Software Engineer', jdCompany || 'Target Company');
     }
-    setShowUploadModal(false);
+    setShowModal(false);
   };
 
   return (
@@ -100,7 +128,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         </div>
 
         <button
-          onClick={() => setShowUploadModal(true)}
+          onClick={() => setShowModal(true)}
           title="Upload custom resume and target job description"
           className="flex items-center gap-1.5 rounded-lg border border-[#262836] bg-[#1a1b24] hover:bg-[#222430] px-2.5 py-1.5 text-xs font-semibold text-[#cbd5e1] hover:text-white transition cursor-pointer"
         >
@@ -199,9 +227,14 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           title="Attach Resume (.pdf, .docx, .txt)"
-          className="p-2.5 rounded-xl bg-[#171822] hover:bg-[#202230] text-[#ff6600] border border-[#262836] transition cursor-pointer shrink-0"
+          disabled={isExtracting}
+          className="p-2.5 rounded-xl bg-[#171822] hover:bg-[#202230] text-[#ff6600] border border-[#262836] transition cursor-pointer shrink-0 disabled:opacity-50"
         >
-          <Paperclip className="w-4 h-4" />
+          {isExtracting ? (
+            <RefreshCw className="w-4 h-4 animate-spin text-[#ff6600]" />
+          ) : (
+            <Paperclip className="w-4 h-4" />
+          )}
         </button>
 
         <div className="relative flex-1 flex items-center">
@@ -224,8 +257,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       </form>
 
       {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-[#111218] border border-[#262836] rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
             <div className="px-5 py-4 border-b border-[#262836] flex items-center justify-between bg-[#15161f]">
               <div className="flex items-center space-x-2">
@@ -233,7 +266,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 <h4 className="font-['Sora'] font-bold text-sm text-white">Upload Resume & Job Description</h4>
               </div>
               <button
-                onClick={() => setShowUploadModal(false)}
+                onClick={() => setShowModal(false)}
                 className="p-1 rounded-lg text-[#94a3b8] hover:text-white hover:bg-[#1f212d] transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -242,26 +275,56 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
             <div className="p-5 space-y-4 text-xs">
               <div className="space-y-1.5">
-                <label className="text-[#cbd5e1] font-semibold">1. Resume File or Raw Text</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-[#cbd5e1] font-semibold">1. Resume File or Raw Text</label>
+                  {uploadedFileName && (
+                    <span className="text-[11px] text-[#10b981] font-bold flex items-center space-x-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>{uploadedFileName} ready</span>
+                    </span>
+                  )}
+                </div>
+
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-2.5 px-3 rounded-xl bg-[#090a0f] border border-dashed border-[#262836] hover:border-[#ff6600] text-[#cbd5e1] flex items-center justify-center space-x-2 transition cursor-pointer"
+                  disabled={isExtracting}
+                  className={`w-full py-3 px-3 rounded-xl border-2 border-dashed transition flex items-center justify-center space-x-2 cursor-pointer ${
+                    uploadedFileName
+                      ? 'bg-[#10b981]/10 border-[#10b981]/50 text-white'
+                      : 'bg-[#090a0f] border-[#262836] hover:border-[#ff6600] text-[#cbd5e1]'
+                  }`}
                 >
-                  <Paperclip className="w-4 h-4 text-[#ff6600]" />
-                  <span>Browse Resume File (.pdf, .docx, .txt)</span>
+                  {isExtracting ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 text-[#ff6600] animate-spin" />
+                      <span className="text-[#ffa05c] font-semibold">Extracting text from document (PDF / Word / TXT)...</span>
+                    </>
+                  ) : uploadedFileName ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
+                      <span className="font-bold text-white">✓ Loaded: {uploadedFileName}</span>
+                      <span className="text-xs text-[#94a3b8]">(Click to replace)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Paperclip className="w-4 h-4 text-[#ff6600]" />
+                      <span className="font-semibold">Browse Resume File (.pdf, .docx, .txt)</span>
+                    </>
+                  )}
                 </button>
+
                 <textarea
-                  rows={3}
+                  rows={4}
                   placeholder="Or paste resume text, skills, and experience here..."
                   value={pastedResume}
                   onChange={(e) => setPastedResume(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-[#090a0f] border border-[#262836] text-white placeholder-[#64748b] focus:outline-none focus:border-[#ff6600]"
+                  className="w-full p-2.5 rounded-xl bg-[#090a0f] border border-[#262836] text-white placeholder-[#64748b] focus:outline-none focus:border-[#ff6600] font-mono text-[11px] leading-relaxed"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[#cbd5e1] font-semibold">2. Target Job Description</label>
+                <label className="text-[#cbd5e1] font-semibold">2. Target Job Description (Optional)</label>
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     type="text"
@@ -280,7 +343,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 </div>
                 <textarea
                   rows={3}
-                  placeholder="Paste the target job description requirements and qualifications here..."
+                  placeholder="Paste target job description requirements, qualifications, and role responsibilities..."
                   value={pastedJd}
                   onChange={(e) => setPastedJd(e.target.value)}
                   className="w-full p-2.5 rounded-xl bg-[#090a0f] border border-[#262836] text-white placeholder-[#64748b] focus:outline-none focus:border-[#ff6600]"
@@ -290,16 +353,24 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
             <div className="px-5 py-3.5 bg-[#15161f] border-t border-[#262836] flex items-center justify-end space-x-2">
               <button
-                onClick={() => setShowUploadModal(false)}
+                onClick={() => setShowModal(false)}
                 className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#94a3b8] hover:text-white transition cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleApplyCustomIntake}
-                className="px-4 py-2 rounded-xl bg-[#ff6600] hover:bg-[#ff771a] text-white text-xs font-bold shadow-md shadow-[#ff6600]/25 cursor-pointer"
+                disabled={isExtracting || (!pastedResume.trim() && !pastedJd.trim())}
+                className="px-5 py-2.5 rounded-xl bg-[#ff6600] hover:bg-[#ff771a] disabled:opacity-40 text-white text-xs font-bold shadow-md shadow-[#ff6600]/25 transition cursor-pointer flex items-center space-x-1.5"
               >
-                Analyze & Synchronize
+                {isExtracting ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Extracting...</span>
+                  </>
+                ) : (
+                  <span>Analyze & Synchronize</span>
+                )}
               </button>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, RefreshCw, Award, Zap } from 'lucide-react';
+import { Settings, RefreshCw, Award, Zap, Upload } from 'lucide-react';
 import { AgentType } from '../types';
 
 interface TopBarProps {
@@ -8,6 +8,7 @@ interface TopBarProps {
   onLoadDemo: () => void;
   onLoad100Ats: () => void;
   onReset: () => void;
+  onOpenUpload?: () => void;
   isProcessing: boolean;
 }
 
@@ -17,6 +18,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onLoadDemo,
   onLoad100Ats,
   onReset,
+  onOpenUpload,
   isProcessing,
 }) => {
   return (
@@ -52,6 +54,19 @@ export const TopBar: React.FC<TopBarProps> = ({
 
         {/* Right Controls */}
         <div className="flex items-center gap-2">
+          {/* Upload Resume Button */}
+          {onOpenUpload && (
+            <button
+              onClick={onOpenUpload}
+              title="Upload custom resume and job description"
+              className="flex items-center gap-1.5 rounded-lg border border-[#262836] bg-[#111218] hover:bg-[#1a1b24] px-3.5 py-2 text-xs font-semibold text-[#cbd5e1] hover:text-white transition cursor-pointer"
+            >
+              <Upload className="h-3.5 w-3.5 text-[#ff6600]" />
+              <span className="hidden sm:inline">Upload Resume</span>
+              <span className="sm:hidden">Upload</span>
+            </button>
+          )}
+
           {/* 100% ATS Benchmark */}
           <button
             onClick={onLoad100Ats}
