@@ -1,0 +1,208 @@
+import React, { useState } from 'react';
+import { BattlecardData } from '../../types';
+import { Zap, Download, Printer, Copy, Check, MessageSquare, Shield, HelpCircle, CheckSquare } from 'lucide-react';
+import { exportElementToPdf } from '../../services/pdfExporter';
+
+interface BattlecardTabProps {
+  battlecard: BattlecardData | null;
+}
+
+export const BattlecardTab: React.FC<BattlecardTabProps> = ({ battlecard }) => {
+  const [copied, setCopied] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  if (!battlecard) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center text-slate-400 space-y-4">
+        <Zap className="w-12 h-12 text-slate-600 animate-pulse" />
+        <h3 className="text-lg font-semibold text-slate-300">No Battlecard Assembled</h3>
+        <p className="text-sm max-w-md text-slate-400">
+          Click "Build Battlecard" in the copilot panel to generate your 1-page day-of interview cheat sheet.
+        </p>
+      </div>
+    );
+  }
+
+  const handleCopyPitch = () => {
+    navigator.clipboard.writeText(battlecard.elevatorPitch);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownloadPdf = async () => {
+    setIsExporting(true);
+    await exportElementToPdf('battlecard-printable-doc', `${battlecard.candidateName.replace(/\s+/g, '_')}_Interview_Battlecard`);
+    setIsExporting(false);
+  };
+
+  return (
+    <div className="space-y-4 pb-12 animate-in fade-in duration-200">
+      {/* Top Controls */}
+      <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-3 shadow-md">
+        <div className="flex items-center space-x-2">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-rose-500/20 text-rose-300 border border-rose-500/30">
+            Day-of Battlecard
+          </span>
+          <span className="text-xs text-slate-400 hidden sm:inline">
+            Keep this open or print as your 1-page cheat sheet!
+          </span>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => window.print()}
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium flex items-center space-x-1.5 transition-colors cursor-pointer"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print</span>
+          </button>
+
+          <button
+            onClick={handleDownloadPdf}
+            disabled={isExporting}
+            className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-rose-600/20 flex items-center space-x-1.5 transition-all cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>{isExporting ? 'Exporting...' : 'Export Battlecard PDF'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Printable Battlecard Sheet */}
+      <div className="flex justify-center">
+        <div
+          id="battlecard-printable-doc"
+          className="w-full max-w-4xl bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6"
+        >
+          {/* Header */}
+          <div className="border-b border-slate-800 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-lg font-bold text-white tracking-tight">
+                  {battlecard.candidateName} — Interview Battlecard
+                </span>
+              </div>
+              <p className="text-xs text-purple-400 font-medium">
+                Target Role: {battlecard.targetRole} @ {battlecard.companyName}
+              </p>
+            </div>
+            <div className="text-[11px] px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+              ⚡ Day-of Quick Reference
+            </div>
+          </div>
+
+          {/* 60-Second Elevator Pitch */}
+          <div className="p-4 rounded-xl bg-purple-950/30 border border-purple-800/40 space-y-2 relative group">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center space-x-1.5">
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>60-Second Opening Elevator Pitch</span>
+              </span>
+              <button
+                onClick={handleCopyPitch}
+                className="text-xs text-purple-400 hover:text-purple-200 flex items-center space-x-1 cursor-pointer"
+              >
+                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                <span>{copied ? 'Copied!' : 'Copy'}</span>
+              </button>
+            </div>
+            <p className="text-xs text-slate-200 leading-relaxed italic">
+              "{battlecard.elevatorPitch}"
+            </p>
+          </div>
+
+          {/* Top Value Props & Key Story Hooks */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Top Value Propositions */}
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2.5">
+              <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center space-x-1.5">
+                <Zap className="w-3.5 h-3.5" />
+                <span>Top 3 Value Pillars (USPs)</span>
+              </h4>
+              <ul className="space-y-2 text-xs text-slate-300">
+                {battlecard.topValueProps.map((usp, i) => (
+                  <li key={i} className="flex items-start space-x-2">
+                    <span className="font-bold text-emerald-400 shrink-0">{i + 1}.</span>
+                    <span>{usp}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Quick STAR Trigger Hooks */}
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2.5">
+              <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center space-x-1.5">
+                <Zap className="w-3.5 h-3.5" />
+                <span>Story Trigger Hooks</span>
+              </h4>
+              <div className="space-y-2 text-xs">
+                {battlecard.keyStoriesHook.map((hook, i) => (
+                  <div key={i} className="p-2 rounded bg-slate-900 border border-slate-800/80 space-y-0.5">
+                    <div className="font-semibold text-slate-200">{hook.trigger}</div>
+                    <div className="text-slate-400 text-[11px]">{hook.hook}</div>
+                    <div className="text-emerald-400 font-medium text-[11px]">→ {hook.punchline}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Questions to Ask Interviewer */}
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
+            <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center space-x-1.5">
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>Smart Questions to Ask Interviewer (Show Seniority)</span>
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              {battlecard.questionsToAsk.map((q, i) => (
+                <div key={i} className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1.5 flex flex-col justify-between">
+                  <div className="font-semibold text-purple-300 text-[11px] uppercase tracking-wider">
+                    {q.category}
+                  </div>
+                  <div className="text-slate-200 font-medium leading-snug">
+                    "{q.question}"
+                  </div>
+                  <div className="text-[10px] text-slate-400 italic pt-1 border-t border-slate-800">
+                    Why: {q.purpose}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sticky Situation Defusers */}
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2.5">
+            <h4 className="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center space-x-1.5">
+              <Shield className="w-3.5 h-3.5" />
+              <span>Sticky Question Defusers</span>
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              {battlecard.defusers.map((def, i) => (
+                <div key={i} className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <div className="font-semibold text-slate-300">{def.scenario}</div>
+                  <div className="text-slate-400 leading-relaxed text-[11px]">"{def.response}"</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Checklist */}
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2 text-xs">
+            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
+              <CheckSquare className="w-3.5 h-3.5 text-purple-400" />
+              <span>Final 15-Minute Countdown Checklist</span>
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-400">
+              {battlecard.dayOfChecklist.map((item, idx) => (
+                <div key={idx} className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
