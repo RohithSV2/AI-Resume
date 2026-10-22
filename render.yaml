@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: ai-resume
+    runtime: static
+    repo: https://github.com/RohithSV2/AI-Resume
+    branch: main
+    buildCommand: pnpm install && pnpm build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
