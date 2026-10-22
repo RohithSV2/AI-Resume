@@ -18,6 +18,7 @@ interface ArtifactWorkspaceProps {
   onUpdateResume: (updated: ResumeData) => void;
   onTogglePracticed: (storyId: string) => void;
   onRunTailoring: () => void;
+  onOptimize100Ats: () => void;
   isProcessing: boolean;
   selectedMockQuestion?: string;
 }
@@ -33,6 +34,7 @@ export const ArtifactWorkspace: React.FC<ArtifactWorkspaceProps> = ({
   onUpdateResume,
   onTogglePracticed,
   onRunTailoring,
+  onOptimize100Ats,
   isProcessing,
   selectedMockQuestion,
 }) => {
@@ -113,6 +115,7 @@ export const ArtifactWorkspace: React.FC<ArtifactWorkspaceProps> = ({
             jd={jd}
             onNavigateTab={onSelectTab}
             onRunTailoring={onRunTailoring}
+            onOptimize100Ats={onOptimize100Ats}
             isProcessing={isProcessing}
           />
         )}

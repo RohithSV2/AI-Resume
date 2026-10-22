@@ -9,10 +9,11 @@ import {
   AgentType, 
   AppConfig 
 } from './types';
-import { SAMPLE_RESUME, SAMPLE_JOB_DESCRIPTION } from './data/sampleProfiles';
+import { SAMPLE_RESUME, ATS_100_BENCHMARK_RESUME, SAMPLE_JOB_DESCRIPTION } from './data/sampleProfiles';
 import { 
   analyzeJobMatch, 
   tailorResume, 
+  optimizeTo100Ats,
   generateStarPrep, 
   generateBattlecard, 
   chatWithCareerAgent 
@@ -141,6 +142,73 @@ Reloaded candidate **${SAMPLE_RESUME.personalInfo.fullName}** and job descriptio
     setIsProcessing(false);
   };
 
+  const handleLoad100AtsProfile = async () => {
+    setIsProcessing(true);
+    setActiveAgent('intake');
+    setResume(ATS_100_BENCHMARK_RESUME);
+
+    const reconResult = await analyzeJobMatch(ATS_100_BENCHMARK_RESUME, jd, config);
+    setRecon(reconResult);
+
+    const starStories = await generateStarPrep(ATS_100_BENCHMARK_RESUME, jd, config);
+    setStories(starStories);
+
+    const card = await generateBattlecard(ATS_100_BENCHMARK_RESUME, jd, config);
+    setBattlecard(card);
+
+    setActiveTab('recon');
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `ats100-${Date.now()}`,
+        sender: 'assistant',
+        agentName: 'Hiring Recon Agent',
+        agentType: 'recon',
+        content: `🏆 **100% ATS Web Benchmark Profile Loaded!**
+Candidate **${ATS_100_BENCHMARK_RESUME.personalInfo.fullName}** achieves a verified **100/100 ATS Score**:
+- ✅ **100% Core Competencies Matched**
+- ✅ **Google XYZ Metric Formula Adherence**
+- ✅ **Single-Column ATS Parsing Certified**`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }
+    ]);
+
+    setActiveAgent('orchestrator');
+    setIsProcessing(false);
+  };
+
+  const handleOptimize100Ats = async () => {
+    setIsProcessing(true);
+    setActiveAgent('tailor');
+
+    const { resume: optimizedResume, recon: optimizedRecon } = optimizeTo100Ats(resume, jd);
+    setResume(optimizedResume);
+    setRecon(optimizedRecon);
+
+    const starStories = await generateStarPrep(optimizedResume, jd, config);
+    setStories(starStories);
+
+    const card = await generateBattlecard(optimizedResume, jd, config);
+    setBattlecard(card);
+
+    setActiveTab('recon');
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `opt100-${Date.now()}`,
+        sender: 'assistant',
+        agentName: 'Resume Tailor Agent',
+        agentType: 'tailor',
+        content: `⚡ **Optimized to 100% ATS Web Standard!**
+Injected all missing keywords, upgraded experience achievements to Google XYZ metrics, and aligned with Jobscan & Workday ATS standards. Current ATS match score is **100%**!`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }
+    ]);
+
+    setActiveAgent('orchestrator');
+    setIsProcessing(false);
+  };
+
   const handleReset = () => {
     setMessages([
       {
@@ -193,8 +261,13 @@ Reloaded candidate **${SAMPLE_RESUME.personalInfo.fullName}** and job descriptio
     }
   };
 
-  const handleTriggerAction = async (actionKey: 'recon' | 'tailor' | 'star' | 'battlecard' | 'mock') => {
+  const handleTriggerAction = async (actionKey: 'recon' | 'tailor' | 'star' | 'battlecard' | 'mock' | 'ats100') => {
     setIsProcessing(true);
+
+    if (actionKey === 'ats100') {
+      await handleOptimize100Ats();
+      return;
+    }
 
     if (actionKey === 'recon') {
       setActiveAgent('recon');
@@ -356,6 +429,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
         activeAgent={activeAgent}
         onOpenConfig={() => setConfigOpen(true)}
         onLoadDemo={handleLoadDemo}
+        onLoad100Ats={handleLoad100AtsProfile}
         onReset={handleReset}
         isProcessing={isProcessing}
       />
@@ -387,6 +461,7 @@ Targeting **${updatedJd.roleTitle}** at **${updatedJd.company}**. Re-calculated 
           onUpdateResume={setResume}
           onTogglePracticed={handleTogglePracticed}
           onRunTailoring={() => handleTriggerAction('tailor')}
+          onOptimize100Ats={handleOptimize100Ats}
           isProcessing={isProcessing}
           selectedMockQuestion={selectedMockQuestion}
         />

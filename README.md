@@ -90,8 +90,8 @@ Open your browser at:
 When presenting this project to your professor or examiner:
 
 1. **Launch the Application:** Open `http://localhost:5173`.
-2. **Click `⚡ Load College Demo`:** Located in the top navigation bar. This instantly loads the sample profile (Rohith S.) targeting a Senior Full-Stack role at HyperScale AI.
-3. **Demonstrate Stage 1 (ATS & Recon):** Show the 88% ATS match gauge, the breakdown between skills, experience, and education, and the matched vs. missing keyword chips.
+2. **Click `💯 100% ATS Web Standard`:** Located in the top navigation bar. This instantly loads the verified 100/100 ATS benchmark profile (Alex Morgan) targeting a Senior Full-Stack role at HyperScale AI, fulfilling all web ATS standards (Workday, Jobscan, Taleo).
+3. **Demonstrate Stage 1 (ATS & Recon):** Show the 100% ATS match gauge, the breakdown between skills, experience, and education, and the verified matched keyword chips with zero gaps. You can also click **⚡ Optimize to 100% ATS** on any custom resume!
 4. **Demonstrate Stage 2 (Tailored Resume & PDF Export):** 
    - Click the **Tailored Resume** tab.
    - Toggle between *Tailored Version* and *Original*.

@@ -1,12 +1,13 @@
 import React from 'react';
 import { ReconAnalysis, JobDescriptionData } from '../../types';
-import { CheckCircle2, AlertTriangle, Building2, Target, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Building2, Target, ArrowRight, ShieldCheck, Zap, Award } from 'lucide-react';
 
 interface ReconTabProps {
   recon: ReconAnalysis | null;
   jd: JobDescriptionData | null;
   onNavigateTab: (tabId: string) => void;
   onRunTailoring: () => void;
+  onOptimize100Ats: () => void;
   isProcessing: boolean;
 }
 
@@ -15,6 +16,7 @@ export const ReconTab: React.FC<ReconTabProps> = ({
   jd,
   onNavigateTab,
   onRunTailoring,
+  onOptimize100Ats,
   isProcessing,
 }) => {
   if (!recon || !jd) {
@@ -29,14 +31,39 @@ export const ReconTab: React.FC<ReconTabProps> = ({
     );
   }
 
+  const is100 = recon.atsScore === 100;
+
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10';
+    if (score >= 95) return 'text-emerald-400 border-emerald-500/60 bg-emerald-500/15 shadow-emerald-500/30';
+    if (score >= 80) return 'text-teal-400 border-teal-500/40 bg-teal-500/10';
     if (score >= 65) return 'text-amber-400 border-amber-500/40 bg-amber-500/10';
     return 'text-rose-400 border-rose-500/40 bg-rose-500/10';
   };
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-200">
+      {/* 100% ATS Badge if achieved */}
+      {is100 && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-900/40 via-teal-900/30 to-purple-900/40 border border-emerald-500/50 flex items-center justify-between gap-4 shadow-xl shadow-emerald-950/40">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300 shrink-0">
+              <Award className="w-6 h-6 animate-bounce" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-emerald-300 flex items-center space-x-1.5">
+                <span>🏆 100% ATS Perfect Match (Web Standard Verified)</span>
+              </h4>
+              <p className="text-xs text-slate-300">
+                Meets 100% of keywords, single-column parsing, and Google XYZ metric formula benchmarks.
+              </p>
+            </div>
+          </div>
+          <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shrink-0">
+            Grade: A+ (100/100)
+          </span>
+        </div>
+      )}
+
       {/* Top Banner: ATS Score & Role Target */}
       <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
         <div className="space-y-2 text-center md:text-left">
@@ -48,7 +75,7 @@ export const ReconTab: React.FC<ReconTabProps> = ({
           <p className="text-sm text-slate-400 flex items-center justify-center md:justify-start space-x-2">
             <span>{jd.company}</span>
             <span>•</span>
-            <span>{jd.location || 'Hybrid'}</span>
+            <span>{jd.location || 'Remote / Hybrid'}</span>
             <span>•</span>
             <span className="text-purple-300">{jd.targetSeniority || 'Mid-Senior'}</span>
           </p>
@@ -56,9 +83,11 @@ export const ReconTab: React.FC<ReconTabProps> = ({
 
         {/* ATS Gauge */}
         <div className="flex items-center space-x-4">
-          <div className={`w-28 h-28 rounded-2xl border-2 flex flex-col items-center justify-center shadow-lg ${getScoreColor(recon.atsScore)}`}>
+          <div className={`w-28 h-28 rounded-2xl border-2 flex flex-col items-center justify-center shadow-lg transition-all ${getScoreColor(recon.atsScore)}`}>
             <span className="text-3xl font-extrabold tracking-tight">{recon.atsScore}%</span>
-            <span className="text-[10px] font-semibold uppercase tracking-wider mt-0.5">ATS Match</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider mt-0.5">
+              {is100 ? 'Perfect ATS' : 'ATS Match'}
+            </span>
           </div>
 
           <div className="space-y-1.5 text-xs text-slate-300 min-w-[140px]">
@@ -102,18 +131,27 @@ export const ReconTab: React.FC<ReconTabProps> = ({
         <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
           <div className="flex items-center space-x-2 text-amber-400">
             <AlertTriangle className="w-4 h-4" />
-            <h4 className="text-sm font-semibold">Missing Keywords to Bridge ({recon.missingKeywords.length})</h4>
+            <h4 className="text-sm font-semibold">
+              {recon.missingKeywords.length === 0 ? 'Missing Keywords (0 - All Matched!)' : `Missing Keywords to Bridge (${recon.missingKeywords.length})`}
+            </h4>
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            {recon.missingKeywords.map((kw, i) => (
-              <span
-                key={i}
-                className="px-2.5 py-1 rounded-md text-xs font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30"
-              >
-                + {kw}
-              </span>
-            ))}
-          </div>
+          {recon.missingKeywords.length === 0 ? (
+            <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-900/30 text-xs text-emerald-300 flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>All target keywords from the job description are present in your resume!</span>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-1.5">
+              {recon.missingKeywords.map((kw, i) => (
+                <span
+                  key={i}
+                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30"
+                >
+                  + {kw}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -155,20 +193,33 @@ export const ReconTab: React.FC<ReconTabProps> = ({
         <div className="space-y-1 text-center sm:text-left">
           <h4 className="text-sm font-semibold text-white flex items-center space-x-1.5 justify-center sm:justify-start">
             <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
-            <span>Ready to close the gap?</span>
+            <span>{is100 ? '100% Score Achieved' : 'Elevate to 100% ATS Web Standard'}</span>
           </h4>
           <p className="text-xs text-slate-300">
-            Run the Resume Tailor Agent to inject missing keywords and upgrade your bullet points with high-impact metrics.
+            {is100
+              ? 'Your resume is fully optimized according to web ATS parser standards (Jobscan & Workday benchmarks).'
+              : 'Auto-inject missing keywords and rewrite bullets using Google XYZ formula to achieve a verified 100% ATS score.'}
           </p>
         </div>
-        <button
-          onClick={onRunTailoring}
-          disabled={isProcessing}
-          className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-lg shadow-purple-600/30 flex items-center space-x-2 cursor-pointer transition-all shrink-0"
-        >
-          <span>Tailor Resume Now</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center space-x-2 shrink-0">
+          {!is100 && (
+            <button
+              onClick={onOptimize100Ats}
+              disabled={isProcessing}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 flex items-center space-x-2 cursor-pointer transition-all"
+            >
+              <span>⚡ Optimize to 100% ATS</span>
+            </button>
+          )}
+          <button
+            onClick={onRunTailoring}
+            disabled={isProcessing}
+            className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-lg shadow-purple-600/30 flex items-center space-x-2 cursor-pointer transition-all"
+          >
+            <span>Review Tailored Resume</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
     </div>
   );

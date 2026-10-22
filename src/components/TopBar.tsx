@@ -1,11 +1,12 @@
 import React from 'react';
-import { Sparkles, Settings, Bot, Zap, RefreshCw, FileText } from 'lucide-react';
+import { Sparkles, Settings, Bot, Zap, RefreshCw, Award } from 'lucide-react';
 import { AgentType } from '../types';
 
 interface TopBarProps {
   activeAgent: AgentType;
   onOpenConfig: () => void;
   onLoadDemo: () => void;
+  onLoad100Ats: () => void;
   onReset: () => void;
   isProcessing: boolean;
 }
@@ -14,6 +15,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   activeAgent,
   onOpenConfig,
   onLoadDemo,
+  onLoad100Ats,
   onReset,
   isProcessing,
 }) => {
@@ -70,14 +72,24 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Right Controls */}
       <div className="flex items-center space-x-2">
+        {/* 100% ATS Benchmark Button */}
+        <button
+          onClick={onLoad100Ats}
+          title="Load 100% ATS Web Standard Benchmark Profile"
+          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-bold shadow-md shadow-emerald-500/20 flex items-center space-x-1.5 transition-all transform active:scale-95 cursor-pointer"
+        >
+          <Award className="w-3.5 h-3.5" />
+          <span>💯 100% ATS Web Standard</span>
+        </button>
+
         {/* 1-Click Demo Button */}
         <button
           onClick={onLoadDemo}
-          title="Load pre-configured candidate profile & job description"
+          title="Load candidate profile & job description"
           className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-medium shadow-md shadow-indigo-500/20 flex items-center space-x-1.5 transition-all transform active:scale-95 cursor-pointer"
         >
           <Zap className="w-3.5 h-3.5 fill-current" />
-          <span>⚡ Load College Demo</span>
+          <span>⚡ Demo Profile</span>
         </button>
 
         {/* Reset Button */}

@@ -25,7 +25,7 @@ interface ChatPanelProps {
   jd: JobDescriptionData | null;
   onUploadResumeText: (text: string, filename?: string) => void;
   onUpdateJdText: (text: string, title?: string, company?: string) => void;
-  onTriggerAction: (actionKey: 'recon' | 'tailor' | 'star' | 'battlecard' | 'mock') => void;
+  onTriggerAction: (actionKey: 'recon' | 'tailor' | 'star' | 'battlecard' | 'mock' | 'ats100') => void;
 }
 
 export const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -254,6 +254,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
       {/* Quick Action Pills */}
       <div className="px-4 py-2 border-t border-slate-800/80 bg-slate-950/80 flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
+        <button
+          onClick={() => onTriggerAction('ats100')}
+          className="px-2.5 py-1 rounded-full bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 hover:text-emerald-200 text-[11px] font-bold flex items-center space-x-1 shrink-0 transition-colors cursor-pointer"
+        >
+          <span>💯 100% ATS Match</span>
+        </button>
+
         <button
           onClick={() => onTriggerAction('recon')}
           className="px-2.5 py-1 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-800 text-blue-400 hover:text-blue-300 text-[11px] font-medium flex items-center space-x-1 shrink-0 transition-colors cursor-pointer"
